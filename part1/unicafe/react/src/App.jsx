@@ -1,40 +1,45 @@
+/* eslint-disable react/prop-types */
 import { useState } from 'react'
-
-const Header = ({ header }) => <h1>{header}</h1>
 
 const Button = ({ handleClick, name }) => <button onClick={handleClick}>{name}</button>
 
+const StatisticLine = ({ _name, _value}) => {
+  return (
+    <tr>
+      <td>{_name}</td>
+      <td>{_value}</td>
+    </tr>
+  )
+}
+
 const Statistics = ({ goodPoints, neutralPoints, badPoints}) => {
+  const all = goodPoints + neutralPoints + badPoints
+  const average = (goodPoints - badPoints) / all
+  const positive = goodPoints / all * 100
+
+  if (all === 0) {
+    return (
+      <div>
+        <h2>statistics</h2>
+        <p>No feedback given</p>
+      </div>
+    )
+    }
+
   return (
     <div>
-      <p>good {goodPoints}</p>
-      <p>neutral {neutralPoints}</p>
-      <p>bad {badPoints}</p>
+      <h2>statistics</h2>
+        <table>
+          <tbody>
+            <StatisticLine _name='good' _value={goodPoints} />
+            <StatisticLine _name='neutral' _value={neutralPoints} />
+            <StatisticLine _name='bad' _value={badPoints} />
+            <StatisticLine _name='all' _value={all} />
+            <StatisticLine _name='average' _value={average} />
+            <StatisticLine _name='positive' _value={positive + ' %'} />
+        </tbody>
+      </table>
     </div>
-  )
-}
-
-const All = ({ _all }) => <div>all {_all}</div>
-
-const Average = ({ _average }) => {
-  if (isNaN(_average)) {
-    return (
-      <div>average 0</div>
-    )
-  }
-  return (
-    <div>average {_average}</div>
-  )
-}
-
-const Positive = ({ _positive}) => {
-  if (isNaN(_positive)) {
-    return (
-      <div>positive 0 %</div>
-    )
-  }
-  return (
-    <div>positive {_positive} %</div>
   )
 }
 
@@ -46,10 +51,6 @@ const App = () => {
   const [bad, setBad] = useState(0)
   const [average, setAverage] = useState(0)
   const [positive, setPositive] = useState(0)
-
-  const all = good + neutral + bad
-  const calcAvg = average / all
-  const positiveInPercent = positive / all * 100
 
   const handleGoodClick = () => {
     let newGood = good + 1
@@ -75,15 +76,11 @@ const App = () => {
   return (
     <>
     <div>
-      <Header header="give feedback" />
+      <h2>give feedback</h2>
       <Button name="good" handleClick={handleGoodClick} />
       <Button name="neutral" handleClick={handleNeutralClick}/>
       <Button name="bad" handleClick={handleBadClick}/>
-      <Header header="statistics" />
       <Statistics goodPoints={good} neutralPoints={neutral} badPoints={bad}/>
-      <All _all={all} />
-      <Average _average={calcAvg} />
-      <Positive _positive={positiveInPercent} />
     </div>
     </>
   )
