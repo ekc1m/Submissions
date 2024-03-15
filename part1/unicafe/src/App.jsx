@@ -3,7 +3,7 @@ import { useState } from 'react'
 
 const Button = ({ handleClick, name }) => <button onClick={handleClick}>{name}</button>
 
-const StatisticLine = ({ _name, _value}) => {
+const StatisticLine = ({ _name, _value }) => {
   return (
     <tr>
       <td>{_name}</td>
@@ -12,7 +12,7 @@ const StatisticLine = ({ _name, _value}) => {
   )
 }
 
-const Statistics = ({ goodPoints, neutralPoints, badPoints}) => {
+const Statistics = ({ goodPoints, neutralPoints, badPoints }) => {
   const all = goodPoints + neutralPoints + badPoints
   const average = (goodPoints - badPoints) / all
   const positive = goodPoints / all * 100
@@ -24,19 +24,19 @@ const Statistics = ({ goodPoints, neutralPoints, badPoints}) => {
         <p>No feedback given</p>
       </div>
     )
-    }
+  }
 
   return (
     <div>
       <h2>statistics</h2>
-        <table>
-          <tbody>
-            <StatisticLine _name='good' _value={goodPoints} />
-            <StatisticLine _name='neutral' _value={neutralPoints} />
-            <StatisticLine _name='bad' _value={badPoints} />
-            <StatisticLine _name='all' _value={all} />
-            <StatisticLine _name='average' _value={average} />
-            <StatisticLine _name='positive' _value={positive + ' %'} />
+      <table>
+        <tbody>
+          <StatisticLine _name='good' _value={goodPoints} />
+          <StatisticLine _name='neutral' _value={neutralPoints} />
+          <StatisticLine _name='bad' _value={badPoints} />
+          <StatisticLine _name='all' _value={all} />
+          <StatisticLine _name='average' _value={average} />
+          <StatisticLine _name='positive' _value={positive + ' %'} />
         </tbody>
       </table>
     </div>
@@ -75,13 +75,13 @@ const App = () => {
 
   return (
     <>
-    <div>
-      <h2>give feedback</h2>
-      <Button name="good" handleClick={handleGoodClick} />
-      <Button name="neutral" handleClick={handleNeutralClick}/>
-      <Button name="bad" handleClick={handleBadClick}/>
-      <Statistics goodPoints={good} neutralPoints={neutral} badPoints={bad}/>
-    </div>
+      <div>
+        <h2>give feedback</h2>
+        <Button name="good" handleClick={handleGoodClick} />
+        <Button name="neutral" handleClick={handleNeutralClick} />
+        <Button name="bad" handleClick={handleBadClick} />
+        <Statistics goodPoints={good} neutralPoints={neutral} badPoints={bad} />
+      </div>
     </>
   )
 }
