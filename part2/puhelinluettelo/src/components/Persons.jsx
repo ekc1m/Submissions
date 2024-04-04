@@ -2,7 +2,9 @@ const Persons = (props) => {
   return (
     <div>
       {props.peopleToShow.map(person =>
-        <p key={person.id}>{person.name} {person.number}</p>
+        <div key={person.id}>
+          <p>{person.name} {person.number} <button onClick={() => props.deleteUser(person.id)}>delete</button></p>
+        </div>
       )}
     </div>
   )

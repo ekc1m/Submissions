@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from 'axios';
+import personService from './services/persons';
 import Persons from "./components/Persons.jsx";
 import Filter from "./components/Filter.jsx";
 import PersonForm from "./components/PersonForm.jsx";
@@ -12,27 +12,50 @@ const App = () => {
   const [showPerson, setShowPerson] = useState('');
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        setPersons(persons.concat(response.data))
+    personService
+      .getAll()
+      .then(initialPersons => {
+        setPersons(initialPersons)
       })
   }, [])
-  const addPerson = (event) => {
+  //TODO: tää
+  const updateNumber = (personName, personNumber) => {
+    { }
+  }
+
+  const addPerson = event => {
     event.preventDefault();
+    const personObject = {
+      name: newName,
+      number: newNumber,
+      id: (persons.length + 1).toString(),
+    };
     if (persons.some(person => person.name === newName)) {
-      alert(`${newName} is already added to phonebook`)
+      alert(`${newName} is already added to phonebook`);
+      // if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
+      //   updateNumber(personObject)
+      //}
     } else {
-      const personObject = {
-        name: newName,
-        number: newNumber,
-        id: persons.length + 1
-      };
-      setPersons(persons.concat(personObject));
-      setNewName("");
-      setNewNumber("");
+      personService
+        .create(personObject)
+        .then(returnedPerson => {
+          setPersons(persons.concat(returnedPerson))
+          setNewName("");
+          setNewNumber("");
+        })
     };
   };
+
+  const deleteUser = id => {
+    if (window.confirm(`Are you sure you want to delete`)) {
+      personService
+        .deletePerson(id)
+        .then(() => {
+          setPersons(persons.filter(person => person.id != id))
+        })
+        .catch(err => console.log(`error: ${err}`))
+    }
+  }
 
   const handleNameChange = (event) => {
     setNewName(event.target.value)
@@ -69,6 +92,7 @@ const App = () => {
       <h2>Numbers</h2>
       <Persons
         peopleToShow={peopleToShow}
+        deleteUser={deleteUser}
       />
     </div>
   )
